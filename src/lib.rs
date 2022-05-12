@@ -2,16 +2,17 @@
 extern crate reqwest;
 extern crate serde;
 extern crate serde_json;
+extern crate chrono;
 use std::collections::HashMap;
 use reqwest::Client;
 use serde::Deserialize;
+use chrono::{prelude::*,offset};
 
 #[derive(Deserialize,Debug)]
 pub struct PopAPI {
-    lastUpdated: u32,
+    lastUpdated: i64,
     totalPopulation: u16,
-    populationByDistrict: HashMap<String,u16>,
-}
+    populationByDistrict: HashMap<String,u16>,}
 
 pub fn makeclient() -> Result<Client,reqwest::Error> {
     static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"),"/",env!("CARGO_PKG_VERSION"),);
@@ -20,16 +21,38 @@ pub fn makeclient() -> Result<Client,reqwest::Error> {
 
 pub fn parse(api: &str) {
     match api {
-        "population" => pop_api(makeclient().unwrap()).unwrap(),
-        _ => panic!("Could not find {}!",api),
-    };
-}
+        "population" => println!("{}",Population::pop_info(Population::pop_api(makeclient().unwrap()).unwrap())),
+        _ => panic!("Could not find {}!",api),};}
 
-#[tokio::main]
-async fn pop_api(client:Client) -> Result<PopAPI,Box<dyn std::error::Error>> {
-    let resp =  client.get("https://www.toontownrewritten.com/api/population").send().await?
-    .json::<PopAPI>()
-    .await?;
-    println!("{:?}",resp);
-    Ok(resp)
+mod Population {
+    use super::*;
+    #[tokio::main]
+    pub async fn pop_api(client:Client) -> Result<PopAPI,Box<dyn std::error::Error>> {
+        let resp =  client.get("https://www.toontownrewritten.com/api/population").send().await?
+        .json::<PopAPI>()
+        .await?;
+        Ok(resp)}
+    pub fn pop_info(json:PopAPI) -> String {
+        let updated = NaiveDateTime::from_timestamp(json.lastUpdated,0);
+        let updated_time: DateTime<offset::Utc> = DateTime::from_utc(updated,offset::Utc);
+        let most_popular = String::from(highest_pop(&json.populationByDistrict));
+        let least_popular = String::from(lowest_pop(&json.populationByDistrict));
+        let info = format!("Last updated: {}\n\
+        Total Population: {}\n\
+        Current most popular district: {} with {} toons.\n\
+        Current least popular district: {} with {} toons.\n",
+        updated_time,json.totalPopulation,most_popular,json.populationByDistrict.get(&most_popular).unwrap(),least_popular,json.populationByDistrict.get(&least_popular).unwrap());
+        info.to_string()}
+    fn highest_pop(dict:&HashMap<String,u16>) -> String {
+        let mut highest = String::new();
+        let mut highest_count: u16 = 0;
+        for (k,v) in dict.clone() {
+            if v>highest_count {highest=k; highest_count=v;}
+        } highest}
+    fn lowest_pop(dict:&HashMap<String,u16>) -> String {
+        let mut lowest = String::new();
+        let mut lowest_count: u16 = 500;
+        for (k,v) in dict.clone() {
+            if v<lowest_count {lowest=k; lowest_count=v;}
+        } lowest}
 }
