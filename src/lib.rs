@@ -18,8 +18,8 @@ pub fn makeclient() -> Result<Client,reqwest::Error> {
     client}
 
 #[tokio::main]
-pub async fn get_json() -> Result<PopAPI,Box<dyn std::error::Error>> {
-    let resp =  get("https://www.toontownrewritten.com/api/population").await?
+pub async fn get_json(client:Client) -> Result<PopAPI,Box<dyn std::error::Error>> {
+    let resp =  client.get("https://www.toontownrewritten.com/api/population").send().await?
     .json::<PopAPI>()
     .await?;
     println!("{:?}",resp);

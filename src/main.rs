@@ -1,3 +1,3 @@
 fn main() {
-    ttrpopcheck::get_json().unwrap();
+    ttrpopcheck_rs::get_json(ttrpopcheck_rs::makeclient().unwrap()).unwrap();
 }
