@@ -8,12 +8,6 @@ use reqwest::Client;
 use serde::Deserialize;
 use chrono::{prelude::*,offset};
 
-#[derive(Deserialize,Debug)]
-pub struct PopAPI {
-    lastUpdated: i64,
-    totalPopulation: u16,
-    populationByDistrict: HashMap<String,u16>,}
-
 pub fn makeclient() -> Result<Client,reqwest::Error> {
     static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"),"/",env!("CARGO_PKG_VERSION"),);
     let client = Client::builder().user_agent(APP_USER_AGENT).build();
@@ -24,8 +18,14 @@ pub fn parse(api: &str) {
         "population" => println!("{}",Population::pop_info(Population::pop_api(makeclient().unwrap()).unwrap())),
         _ => panic!("Could not find {}!",api),};}
 
-mod Population {
+mod Population {    
     use super::*;
+    #[derive(Deserialize,Debug)]
+    pub struct PopAPI {
+        lastUpdated: i64,
+        totalPopulation: u16,
+        populationByDistrict: HashMap<String,u16>,}
+
     #[tokio::main]
     pub async fn pop_api(client:Client) -> Result<PopAPI,Box<dyn std::error::Error>> {
         let resp =  client.get("https://www.toontownrewritten.com/api/population").send().await?
