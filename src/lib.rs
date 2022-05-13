@@ -11,7 +11,6 @@ pub fn makeclient() -> Result<Client,reqwest::Error> {
     static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"),"/",env!("CARGO_PKG_VERSION"),);
     Client::builder().user_agent(APP_USER_AGENT).build()}
 
-
 ///Tools for Toontown Rewritten's Population API
 
 pub mod Population {
@@ -227,6 +226,63 @@ pub mod Offices {
             9100 => Some(String::from("Lullaby Lane")),
             9200 => Some(String::from("Pajama Place")),
             _ => None,
+        }
+    }
+}
+
+pub mod Doodles {
+    extern crate reqwest;
+    extern crate serde;
+    extern crate serde_json;
+    use std::collections::HashMap;
+    use reqwest::Client;
+    use serde::Deserialize;
+
+    ///Struct for the Doodle API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/doodles.md>
+    
+    #[derive(Deserialize,Debug)]
+    pub struct Districts (HashMap<String,HashMap<String,Vec<Doodle>>>);
+
+    ///Struct for information about a specific doodle.
+    
+    #[derive(Deserialize,Debug)]
+    pub struct Doodle {
+        pub dna: String,
+        pub traits: Vec<String>,
+        pub cost: u16,
+    }
+
+    impl Districts {
+
+        ///Grabs information from the Silly Meter API and converts it to the Meter struct.
+
+        #[tokio::main]
+        pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
+            let resp =  client.get("https://www.toontownrewritten.com/api/doodles").send().await?
+            .json::<Self>()
+            .await?;
+            Ok(resp)}
+    }
+
+    ///Struct for using Rendition to render a doodle image using its DNA.
+
+    #[derive(Debug)]
+    pub struct Render {
+        pub dna: String,
+        pub width: u16,
+        height: u16,
+        pub extension: String,
+    }
+    impl Render {
+
+        ///Creates a Render struct for doodle renditions.
+        
+        pub fn make(dna:&str,dim:u16,ext:&str) -> Self{Self{dna:dna.to_string(),width:dim,height:dim,extension:ext.to_string(),}}
+
+        ///Creates the link to a doodle rendition.
+
+        pub fn render(self) -> String {
+            format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,self.width,self.height,self.extension)
         }
     }
 }
