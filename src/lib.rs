@@ -1,10 +1,11 @@
+//!A library specialized for contacting Toontown Rewritten APIs.
 #![deny(clippy::all)]
 #![allow(non_snake_case)]
 extern crate reqwest;
 extern crate chrono;
 use reqwest::Client;
 
-/// Makes the default client for the API checker.
+///Makes the default client for the API checker.
 
 pub fn makeclient() -> Result<Client,reqwest::Error> {
     static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"),"/",env!("CARGO_PKG_VERSION"),);
@@ -159,6 +160,14 @@ pub mod Invasions {
             .json::<Self>()
             .await?;
             Ok(resp)}
+        
+        ///Detects if a particular cog is currently invading a district
+        
+        pub fn cog_invading(&self,cog:&str) -> bool {
+            for (k,v) in &self.invasions {
+                if v.r#type == cog {return true}
+            } false
+        }
     }
 }
 
