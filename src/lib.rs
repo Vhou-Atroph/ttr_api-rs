@@ -68,8 +68,8 @@ pub mod Population {
     ///Gives some basic information about the current population of Toontown Rewritten using the Population API.
     /// 
     /// ```
-    /// use ttr_api_rs::Population;
-    /// let pop = Population::PopAPI::new(ttr_api_rs::makeclient().unwrap()).unwrap();
+    /// use ttr_api::Population;
+    /// let pop = Population::PopAPI::new(ttr_api::makeclient().unwrap()).unwrap();
     /// println!("{}",Population::pop_info(&pop));
     /// ```
     
