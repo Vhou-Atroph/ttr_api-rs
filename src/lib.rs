@@ -230,6 +230,8 @@ pub mod Offices {
     }
 }
 
+///Tools for Toontown Rewritten's Doodle API
+
 pub mod Doodles {
     extern crate reqwest;
     extern crate serde;
