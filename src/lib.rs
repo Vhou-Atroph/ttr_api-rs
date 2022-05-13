@@ -1,3 +1,4 @@
+#![deny(clippy::all)]
 #![allow(non_snake_case)]
 extern crate reqwest;
 extern crate serde;
@@ -6,17 +7,13 @@ extern crate chrono;
 use std::collections::HashMap;
 use reqwest::Client;
 use serde::Deserialize;
-use chrono::{prelude::*,offset};
+use chrono::prelude::*;
 
 pub fn makeclient() -> Result<Client,reqwest::Error> {
     static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"),"/",env!("CARGO_PKG_VERSION"),);
     Client::builder().user_agent(APP_USER_AGENT).build()}
-pub fn parse(api: &str) {
-    match api {
-        "population" => println!("{}",Population::pop_info(&Population::pop_api(makeclient().unwrap()).unwrap())),
-        _ => panic!("Could not find {}!",api),};}
 
-mod Population {    
+pub mod Population {    
     use super::*;
     #[derive(Deserialize,Debug)]
     pub struct PopAPI {
@@ -32,7 +29,7 @@ mod Population {
         Ok(resp)}
     pub fn pop_info(json:&PopAPI) -> String {
         let updated = NaiveDateTime::from_timestamp(json.lastUpdated,0);
-        let updated_time: DateTime<offset::Utc> = DateTime::from_utc(updated,offset::Utc);
+        let updated_time: DateTime<Utc> = DateTime::from_utc(updated,Utc);
         let most_popular = highest_pop(&json.populationByDistrict);
         let least_popular = lowest_pop(&json.populationByDistrict);
         let info = format!("Last updated: {}\n\

@@ -1,3 +1,4 @@
+use ttr_api_rs::Population;
 fn main() {
-    ttr_api_check_rs::parse("population");
+    println!("{}",Population::pop_info(&Population::pop_api(ttr_api_rs::makeclient().unwrap()).unwrap()));
 }
