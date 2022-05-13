@@ -20,6 +20,6 @@ mod tests {
     #[test]
     fn doodle_render() {
         let dod = Doodles::Render::make("64ff02ff01030e010001",256,"png");
-        assert_eq!(Doodles::Render::render(dod),String::from("rendition.toontownrewritten.com/render/64ff02ff01030e010001/doodle/256x256.png"));
+        assert_eq!(dod.render(),String::from("rendition.toontownrewritten.com/render/64ff02ff01030e010001/doodle/256x256.png"));
     }
 }
