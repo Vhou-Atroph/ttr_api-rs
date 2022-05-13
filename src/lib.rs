@@ -161,3 +161,63 @@ pub mod Invasions {
             Ok(resp)}
     }
 }
+
+///Tools for Toontown Rewritten's Field Office API
+
+pub mod Offices {
+    extern crate reqwest;
+    extern crate serde;
+    extern crate serde_json;
+    use std::collections::HashMap;
+    use reqwest::Client;
+    use serde::Deserialize;
+
+    ///Struct for the Field Office API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/field-offices.md>
+
+    #[derive(Deserialize,Debug)]
+    pub struct Office {
+        pub lastUpdated: i64,
+        pub fieldOffices: HashMap<u16,HQ>
+    }
+
+    ///Struct for each individual street's field office
+
+    #[derive(Deserialize,Debug)]
+    pub struct HQ {
+        pub department: char,
+        pub difficulty: u8,
+        pub annexes: u8,
+        pub expiring: Option<i64>,
+    }
+
+    impl Office {
+        
+        ///Grabs information from the Field Office API and converts it to the PopAPI struct.
+
+        #[tokio::main]
+        pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
+            let resp =  client.get("https://www.toontownrewritten.com/api/fieldoffices").send().await?
+            .json::<Self>()
+            .await?;
+            Ok(resp)}
+    }
+
+    ///Converts the locale id of a Field Office into a street name if it exists.
+
+    pub fn locale(id:u16) -> Option<String> {
+        match id {
+            3100 => Some(String::from("Walrus Way")),
+            3200 => Some(String::from("Sleet Street")),
+            3300 => Some(String::from("Polar Place")),
+            4100 => Some(String::from("Alto Avenue")),
+            4200 => Some(String::from("Baritone Boulevard")),
+            4300 => Some(String::from("Tenor Terrace")),
+            5100 => Some(String::from("Elm Street")),
+            5200 => Some(String::from("Maple Street")),
+            5300 => Some(String::from("Oak Street")),
+            9100 => Some(String::from("Lullaby Lane")),
+            9200 => Some(String::from("Pajama Place")),
+            _ => None,
+        }
+    }
+}
