@@ -1,13 +1,8 @@
 #![deny(clippy::all)]
 #![allow(non_snake_case)]
 extern crate reqwest;
-extern crate serde;
-extern crate serde_json;
 extern crate chrono;
-use std::collections::HashMap;
 use reqwest::Client;
-use serde::Deserialize;
-use chrono::prelude::*;
 
 /// Makes the default client for the API checker.
 
@@ -15,16 +10,27 @@ pub fn makeclient() -> Result<Client,reqwest::Error> {
     static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"),"/",env!("CARGO_PKG_VERSION"),);
     Client::builder().user_agent(APP_USER_AGENT).build()}
 
-pub mod Population {    
+
+///Tools for Toontown Rewritten's Population API
+
+pub mod Population {
+    extern crate reqwest;
+    extern crate serde;
+    extern crate serde_json;
+    extern crate chrono;
+    use std::collections::HashMap;
+    use reqwest::Client;
+    use serde::Deserialize;
+    use chrono::prelude::*;
     use super::*;
     
     ///Struct for the Population API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/population.md>
     
     #[derive(Deserialize,Debug)]
     pub struct PopAPI {
-        lastUpdated: i64,
-        totalPopulation: u16,
-        populationByDistrict: HashMap<String,u16>,}
+        pub lastUpdated: i64,
+        pub totalPopulation: u16,
+        pub populationByDistrict: HashMap<String,u16>,}
     
     impl PopAPI {
 
@@ -59,7 +65,7 @@ pub mod Population {
             } lowest}
         }
     
-    ///Gives some basic information about the current population of Toontown Rewritten using the Population API. Example usage with println:
+    ///Gives some basic information about the current population of Toontown Rewritten using the Population API.
     /// 
     /// ```
     /// use ttr_api_rs::Population;
@@ -78,4 +84,38 @@ pub mod Population {
         Current least popular district: {} with {} toons.\n",
         updated_time,json.totalPopulation,most_popular,json.populationByDistrict.get(&most_popular).unwrap(),least_popular,json.populationByDistrict.get(&least_popular).unwrap());
         info.to_string()}
+}
+
+///Tools for Toontown Rewritten's Silly Meter API
+
+pub mod SillyMeter {
+    extern crate reqwest;
+    extern crate serde;
+    extern crate serde_json;
+    use reqwest::Client;
+    use serde::Deserialize;
+
+    ///Struct for the Silly Meter API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/silly-meter.md>
+
+    #[derive(Deserialize,Debug)]
+    pub struct Meter {
+        pub state: String,
+        pub rewards: Vec<String>,
+        pub rewardDescriptions: Vec<String>,
+        pub rewardPoints: Vec<Option<u32>>,
+        pub winner: Option<String>,
+        pub hp: u32,
+        pub nextUpdateTimestamp: i64,
+        pub asOf: i64,
+    }
+
+    impl Meter {
+
+        #[tokio::main]
+        pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
+            let resp =  client.get("https://www.toontownrewritten.com/api/sillymeter").send().await?
+            .json::<Self>()
+            .await?;
+            Ok(resp)}
+    }
 }
