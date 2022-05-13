@@ -1,8 +1,11 @@
 [package]
-name = "ttr_api_rs"
-version = "0.1.0"
+name = "ttr_api"
+description = "Easily get data from TTR APIs with this Rust crate!"
+version = "1.0.0"
 edition = "2021"
 authors = ["Vhou-Atroph"]
+repository = "https://github.com/Vhou-Atroph/ttr_api-rs"
+license = "GPL-3.0-only"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
