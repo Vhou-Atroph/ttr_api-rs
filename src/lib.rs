@@ -1,4 +1,4 @@
-//!A library specialized for contacting Toontown Rewritten APIs.
+//!A library specialized for contacting Toontown Rewritten APIs. See an example usage of this crate at <https://github.com/Vhou-Atroph/ttr_pop_webserver>.
 #![allow(non_snake_case)]
 #![allow(dead_code)]
 extern crate reqwest;
