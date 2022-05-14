@@ -245,13 +245,13 @@ pub mod Doodles {
         
         ///Get a specific doodle in a store today. If the district, playground, or doodle don't exist this function will return None.
         
-        pub fn get_doodle(self,dist:&str,playground:&str,id:usize) -> Result<Doodle,Option<Doodle>> {
-            if id>6 {return Err(None)}
+        pub fn get_doodle(self,dist:&str,playground:&str,id:usize) -> Option<Doodle> {
+            if id>6 {return None}
             let dist_hash;
             let pg_vec;
-            if self.0.contains_key(dist) {dist_hash=self.0.get(dist).unwrap()} else {return Err(None)}
-            if dist_hash.contains_key(playground) {pg_vec=dist_hash.get(playground).unwrap()} else {return Err(None)}
-            Ok(Doodle {
+            if self.0.contains_key(dist) {dist_hash=self.0.get(dist).unwrap()} else {return None}
+            if dist_hash.contains_key(playground) {pg_vec=dist_hash.get(playground).unwrap()} else {return None}
+            Some(Doodle {
                 dna: pg_vec[id].dna.clone(),
                 traits: pg_vec[id].traits.clone(),
                 cost: pg_vec[id].cost,
