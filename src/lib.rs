@@ -1,8 +1,7 @@
 //!A library specialized for contacting Toontown Rewritten APIs.
-#![deny(clippy::all)]
 #![allow(non_snake_case)]
+#![allow(dead_code)]
 extern crate reqwest;
-extern crate chrono;
 use reqwest::Client;
 
 ///Makes the default client for the API checker.
@@ -17,11 +16,9 @@ pub mod Population {
     extern crate reqwest;
     extern crate serde;
     extern crate serde_json;
-    extern crate chrono;
     use std::collections::HashMap;
     use reqwest::Client;
     use serde::Deserialize;
-    use chrono::prelude::*;
     
     ///Struct for the Population API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/population.md>
     
@@ -45,7 +42,7 @@ pub mod Population {
     
         ///Returns the current most popular district from the populationByDistrict HashMap.
     
-        fn highest_pop(&self) -> String {
+        pub fn highest_pop(&self) -> String {
             let dict = &self.populationByDistrict;
             let mut highest = String::new();
             let mut highest_count: u16 = 0;
@@ -55,7 +52,7 @@ pub mod Population {
         
         ///Returns the current least popular district from the populationByDistrict HashMap.
     
-        fn lowest_pop(&self) -> String {
+        pub fn lowest_pop(&self) -> String {
             let dict = &self.populationByDistrict;
             let mut lowest = String::new();
             let mut lowest_count: u16 = 500;
@@ -63,26 +60,6 @@ pub mod Population {
                 if v<lowest_count {lowest=k; lowest_count=v;}
             } lowest}
         }
-    
-    ///Gives some basic information about the current population of Toontown Rewritten using the Population API.
-    /// 
-    /// ```
-    /// use ttr_api::Population;
-    /// let pop = Population::PopAPI::new(ttr_api::makeclient().unwrap()).unwrap();
-    /// println!("{}",Population::pop_info(&pop));
-    /// ```
-    
-    pub fn pop_info(json:&PopAPI) -> String {
-        let updated = NaiveDateTime::from_timestamp(json.lastUpdated,0);
-        let updated_time: DateTime<Utc> = DateTime::from_utc(updated,Utc);
-        let most_popular = json.highest_pop();
-        let least_popular = json.lowest_pop();
-        let info = format!("Last updated: {}\n\
-        Total Population: {}\n\
-        Current most popular district: {} with {} toons.\n\
-        Current least popular district: {} with {} toons.\n",
-        updated_time,json.totalPopulation,most_popular,json.populationByDistrict.get(&most_popular).unwrap(),least_popular,json.populationByDistrict.get(&least_popular).unwrap());
-        info.to_string()}
 }
 
 ///Tools for Toontown Rewritten's Silly Meter API
@@ -163,7 +140,7 @@ pub mod Invasions {
         ///Detects if a particular cog is currently invading a district
         
         pub fn cog_invading(&self,cog:&str) -> bool {
-            for (k,v) in &self.invasions {
+            for (_k,v) in &self.invasions {
                 if v.r#type == cog {return true}
             } false
         }
