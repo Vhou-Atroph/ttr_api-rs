@@ -1,14 +1,15 @@
 //!A library specialized for contacting Toontown Rewritten APIs. See an example usage of this crate at <https://github.com/Vhou-Atroph/ttr_pop_webserver>.
 #![allow(non_snake_case)]
 #![allow(dead_code)]
+#![deny(clippy::all)]
 extern crate reqwest;
 use reqwest::Client;
 
 ///Makes the default client for the API checker.
 
-pub fn makeclient() -> Result<Client,reqwest::Error> {
+pub fn makeclient() -> Client {
     static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"),"/",env!("CARGO_PKG_VERSION"),);
-    Client::builder().user_agent(APP_USER_AGENT).build()}
+    Client::builder().user_agent(APP_USER_AGENT).build().unwrap()}
 
 ///Tools for Toontown Rewritten's Population API
 
@@ -139,8 +140,8 @@ pub mod Invasions {
         
         ///Detects if a particular cog is currently invading a district
         
-        pub fn cog_invading(&self,cog:&str) -> bool {
-            for (_k,v) in &self.invasions {
+        pub fn cog_invading(self,cog:&str) -> bool {
+            for (_k,v) in self.invasions {
                 if v.r#type == cog {return true}
             } false
         }
@@ -233,7 +234,7 @@ pub mod Doodles {
 
     impl Districts {
 
-        ///Grabs information from the Silly Meter API and converts it to the Meter struct.
+        ///Grabs information from the Doodle API and converts it to the Districts struct.
 
         #[tokio::main]
         pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
@@ -241,27 +242,39 @@ pub mod Doodles {
             .json::<Self>()
             .await?;
             Ok(resp)}
-    }
-
-    ///Struct for using Rendition to render a doodle image using its DNA.
-
-    #[derive(Debug)]
-    pub struct Render {
-        pub dna: String,
-        pub width: u16,
-        height: u16,
-        pub extension: String,
-    }
-    impl Render {
-
-        ///Creates a Render struct for doodle renditions.
         
-        pub fn make(dna:&str,dim:u16,ext:&str) -> Self{Self{dna:dna.to_string(),width:dim,height:dim,extension:ext.to_string(),}}
+        ///Get a specific doodle in a store today. If the district, playground, or doodle don't exist this function will return None.
+        
+        pub fn get_doodle(self,dist:&str,playground:&str,id:usize) -> Result<Doodle,Option<Doodle>> {
+            if id>6 {return Err(None)}
+            let dist_hash;
+            let pg_vec;
+            if self.0.contains_key(dist) {dist_hash=self.0.get(dist).unwrap()} else {return Err(None)}
+            if dist_hash.contains_key(playground) {pg_vec=dist_hash.get(playground).unwrap()} else {return Err(None)}
+            Ok(Doodle {
+                dna: pg_vec[id].dna.clone(),
+                traits: pg_vec[id].traits.clone(),
+                cost: pg_vec[id].cost,
+            })}
+    }
+
+    impl Doodle {
 
         ///Creates the link to a doodle rendition.
+        /// The below function would return the render of a doodle from the pet shop in the Toontown Central of Blam Canyon.
+        /// ```
+        /// use ttr_api::Doodles;
+        /// 
+        /// fn doodle_render() -> String {
+        ///     let doodle_api = Doodles::Districts::new(ttr_api::makeclient()).unwrap();
+        ///     let doodle = doodle_api.get_doodle("Blam Canyon","Toontown Central",0).unwrap();
+        ///     doodle.render(256,"png")
+        /// }
+        /// ```
 
-        pub fn render(self) -> String {
-            format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,self.width,self.height,self.extension)
+        pub fn render(self,dim:u16,ext:&str) -> String {
+            format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,dim,dim,ext)
         }
+
     }
 }
