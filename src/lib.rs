@@ -1,6 +1,6 @@
 //!A library specialized for contacting Toontown Rewritten APIs. See an example usage of this crate at <https://github.com/Vhou-Atroph/ttr_pop_webserver>.
 #![allow(non_snake_case)]
-#![allow(dead_code)]
+#![allow(unused_variables)]
 #![deny(clippy::all)]
 extern crate reqwest;
 use reqwest::Client;
@@ -27,7 +27,8 @@ pub mod Population {
     pub struct PopAPI {
         pub lastUpdated: i64,
         pub totalPopulation: u16,
-        pub populationByDistrict: HashMap<String,u16>,}
+        pub populationByDistrict: HashMap<String,u16>,
+    }
     
     impl PopAPI {
 
@@ -60,6 +61,22 @@ pub mod Population {
             for (k,v) in dict.clone() {
                 if v<lowest_count {lowest=k; lowest_count=v;}
             } lowest}
+        
+        /// Gets the population of a specific district. If the district does not exist, returns None.
+        /// ```
+        /// use ttr_api::Population;
+        /// 
+        /// fn blam_pop() {
+        ///     let pop_api = Population::PopAPI::new(ttr_api::makeclient()).unwrap();
+        ///     let blam_pop = pop_api.dist_pop("Blam Canyon").unwrap();
+        ///     println!("Blam Canyon currently has a population of {} toons.",blam_pop);
+        /// }
+        /// ```
+        
+        pub fn dist_pop(&self,dist:&str) -> Option<u16> {
+            let pop;
+            if self.populationByDistrict.contains_key(dist) {pop = self.populationByDistrict.get(dist).unwrap();}
+            else {return None} Some(*pop)}
         }
 }
 
@@ -129,7 +146,7 @@ pub mod Invasions {
 
     impl Invasion {
         
-        ///Grabs information from the Invasions API and converts it to the PopAPI struct.
+        ///Grabs information from the Invasions API and converts it to the Invasion struct.
 
         #[tokio::main]
         pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
@@ -138,13 +155,12 @@ pub mod Invasions {
             .await?;
             Ok(resp)}
         
-        ///Detects if a particular cog is currently invading a district
+        ///Detects if a particular cog is currently invading a district and returns a tuple containing a boolean and an Option value.
         
-        pub fn cog_invading(self,cog:&str) -> bool {
-            for (_k,v) in self.invasions {
-                if v.r#type == cog {return true}
-            } false
-        }
+        pub fn cog_invading(&self,cog:&str) -> (bool,Option<&DistrictInv>) {
+            for (k,v) in &self.invasions {
+                if v.r#type == cog {return (true,Some(v))}
+            } (false,None)}
     }
 }
 
@@ -178,7 +194,7 @@ pub mod Offices {
 
     impl Office {
         
-        ///Grabs information from the Field Office API and converts it to the PopAPI struct.
+        ///Grabs information from the Field Office API and converts it to the Offices struct.
 
         #[tokio::main]
         pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
@@ -186,6 +202,32 @@ pub mod Offices {
             .json::<Self>()
             .await?;
             Ok(resp)}
+        
+        ///Get a field office on a specific street. If it doesn't exist, returns None. Also returns the street ID.
+        /// ```
+        /// use ttr_api::Offices;
+        /// 
+        /// fn walrus_way_office() {
+        ///     let office_api = Offices::Office::new(ttr_api::makeclient()).unwrap();
+        ///     let walfice = office_api.get_office(3100);
+        ///     match walfice.0 {
+        ///     Some(HQ) => println!("There's a Field Office on Walrus Way!"),
+        ///     None => println!("There's no Field Office on Walrus Way...")
+        ///     }
+        /// }
+        /// ```
+        
+        pub fn get_office(&self,street:u16) -> (Option<HQ>,u16) {
+            let hq_hash;
+            if self.fieldOffices.contains_key(&street) 
+                {hq_hash=self.fieldOffices.get(&street).unwrap();
+                (Some(HQ {
+                    department: hq_hash.department,
+                    difficulty: hq_hash.difficulty,
+                    annexes: hq_hash.annexes,
+                    expiring: hq_hash.expiring,}),street)} 
+            else {(None,street)}
+        }
     }
 
     ///Converts the locale id of a Field Office into a street name if it exists.
@@ -235,6 +277,11 @@ pub mod Doodles {
     impl Districts {
 
         ///Grabs information from the Doodle API and converts it to the Districts struct.
+        /// ```
+        /// use ttr_api::Doodles;
+        /// 
+        /// let doodle_api = Doodles::Districts::new(ttr_api::makeclient()).unwrap();
+        /// ```
 
         #[tokio::main]
         pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
@@ -245,7 +292,7 @@ pub mod Doodles {
         
         ///Get a specific doodle in a store today. If the district, playground, or doodle don't exist this function will return None.
         
-        pub fn get_doodle(self,dist:&str,playground:&str,id:usize) -> Option<Doodle> {
+        pub fn get_doodle(&self,dist:&str,playground:&str,id:usize) -> Option<Doodle> {
             if id>6 {return None}
             let dist_hash;
             let pg_vec;
@@ -254,8 +301,7 @@ pub mod Doodles {
             Some(Doodle {
                 dna: pg_vec[id].dna.clone(),
                 traits: pg_vec[id].traits.clone(),
-                cost: pg_vec[id].cost,
-            })}
+                cost: pg_vec[id].cost,})}
     }
 
     impl Doodle {
@@ -272,9 +318,8 @@ pub mod Doodles {
         /// }
         /// ```
 
-        pub fn render(self,dim:u16,ext:&str) -> String {
-            format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,dim,dim,ext)
-        }
+        pub fn render(&self,dim:u16,ext:&str) -> String {
+            format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,dim,dim,ext)}
 
     }
 }
