@@ -211,8 +211,8 @@ pub mod Offices {
         ///     let office_api = Offices::Office::new(ttr_api::makeclient()).unwrap();
         ///     let walfice = office_api.get_office(3100);
         ///     match walfice.0 {
-        ///     Some(HQ) => println!("There's a Field Office on Walrus Way!"),
-        ///     None => println!("There's no Field Office on Walrus Way...")
+        ///         Some(HQ) => println!("There's a Field Office on Walrus Way!"),
+        ///         None => println!("There's no Field Office on Walrus Way...")
         ///     }
         /// }
         /// ```
