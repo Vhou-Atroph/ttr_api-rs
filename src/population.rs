@@ -14,6 +14,7 @@ pub struct PopAPI {
     pub lastUpdated: i64,
     pub totalPopulation: u16,
     pub populationByDistrict: HashMap<String,u16>,
+    pub statusByDistrict: HashMap<String,String>,
 }
 
 impl PopAPI {
