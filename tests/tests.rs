@@ -48,3 +48,8 @@ fn earliest_author() {
     let news_api = news::News::new_id(ttr_api::makeclient(),2).unwrap(); //The earliest news article ID is 2- I'm guessing id 1 is reserved for the original TTR announcement on MMOCF?
     assert_eq!(news_api.author,String::from("Sir Max"));
 }
+#[test]
+fn get_lom_art() {
+    let news_api = news::News::new_id(ttr_api::makeclient(),340).unwrap();
+    assert_eq!(news_api.get_link(),"https://www.toontownrewritten.com/news/item/340".to_string());
+}

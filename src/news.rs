@@ -52,4 +52,10 @@ impl News {
         .json::<Self>()
         .await?;
         Ok(resp)}
+    
+    ///Grabs link for a news article from the API.
+
+    pub fn get_link(&self) -> String {
+        format!("https://www.toontownrewritten.com/news/item/{}",self.postId)
+    }
 }
