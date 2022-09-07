@@ -16,3 +16,4 @@ pub mod sillymeter;
 pub mod invasion;
 pub mod office;
 pub mod doodle;
+pub mod news;
