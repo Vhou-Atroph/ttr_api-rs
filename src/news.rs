@@ -24,7 +24,8 @@ pub struct News {
 pub struct NewsList(Vec<ListedNews>);
 
 ///Struct for an article in the News list API for Toontown Rewritten. It does not have any formal documentation. You can find it at <https://www.toontownrewritten.com/api/news/list>.
-#[derive(Deserialize,Debug)]
+
+#[derive(Deserialize,Debug,Clone)]
 pub struct ListedNews {
     pub postId: u16,
     pub title: String,
@@ -55,6 +56,33 @@ impl News {
     
     ///Grabs link for a news article from the API.
 
+    pub fn get_link(&self) -> String {
+        format!("https://www.toontownrewritten.com/news/item/{}",self.postId)
+    }
+}
+
+impl NewsList {
+
+    ///Grabs a complete list of articles from the API.
+    
+    #[tokio::main]
+    pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
+        let resp =  client.get("https://www.toontownrewritten.com/api/news/list").send().await?
+        .json::<Self>()
+        .await?;
+        Ok(resp)}
+
+    ///Grabs a specific article index from NewsList.
+    
+    pub fn get_index(&self,index:usize) -> ListedNews {
+        self.0[index].clone()
+    }
+}
+
+impl ListedNews {
+
+    ///Grabs link for a news article from the API.
+    
     pub fn get_link(&self) -> String {
         format!("https://www.toontownrewritten.com/news/item/{}",self.postId)
     }

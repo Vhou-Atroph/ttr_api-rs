@@ -53,3 +53,17 @@ fn get_lom_art() {
     let news_api = news::News::new_id(ttr_api::makeclient(),340).unwrap();
     assert_eq!(news_api.get_link(),"https://www.toontownrewritten.com/news/item/340".to_string());
 }
+#[test]
+fn verify_latest_list() {
+    let news_api = news::News::new_latest(ttr_api::makeclient()).unwrap();
+    let news_api_list = news::NewsList::new(ttr_api::makeclient()).unwrap();
+    let latest_list = news_api_list.get_index(0);
+    assert_eq!(news_api.postId,latest_list.postId)
+}
+#[test]
+fn verify_latest_links() {
+    let news_api = news::News::new_latest(ttr_api::makeclient()).unwrap();
+    let news_api_list = news::NewsList::new(ttr_api::makeclient()).unwrap();
+    let latest_list = news_api_list.get_index(0);
+    assert_eq!(news_api.get_link(),latest_list.get_link())
+}
