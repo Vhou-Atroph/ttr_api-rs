@@ -65,7 +65,7 @@ impl Doodle {
     /// }
     /// ```
 
-    pub fn render(&self,dim:u16,ext:&str) -> String {
+    pub fn render(&self,dim:u16,ext:&str) -> String { //TODO: make a separate rendition module
         format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,dim,dim,ext)}
 
 }
