@@ -8,7 +8,7 @@ If you want the latest stable version from crates.io, put this in your Cargo.tom
 
 ```toml
 [dependencies]
-ttr_api = "1.2.1"
+ttr_api = "1.3.0"
 ```
 
 Alternatively, if you want the latest version from the Github repository, put this in your Cargo.toml:
