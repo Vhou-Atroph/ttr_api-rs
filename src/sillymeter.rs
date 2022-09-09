@@ -29,5 +29,6 @@ impl Meter {
         let resp =  client.get("https://www.toontownrewritten.com/api/sillymeter").send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
 }

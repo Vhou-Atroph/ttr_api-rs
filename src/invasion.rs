@@ -34,12 +34,14 @@ impl Invasion {
         let resp =  client.get("https://www.toontownrewritten.com/api/invasions").send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
     
     ///Detects if a particular cog is currently invading a district and returns a tuple containing a boolean and an Option value.
     
     pub fn cog_invading(&self,cog:&str) -> (bool,Option<&DistrictInv>) {
         for (k,v) in &self.invasions {
             if v.r#type == cog {return (true,Some(v))}
-        } (false,None)}
+        } (false,None)
+    }
 }

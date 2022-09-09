@@ -32,7 +32,8 @@ impl News {
         let resp =  client.get("https://www.toontownrewritten.com/api/news").send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
 
     ///Grabs a news article with specific ID from the API.
     
@@ -41,7 +42,8 @@ impl News {
         let resp =  client.get(format!("https://www.toontownrewritten.com/api/news/{}",id)).send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
     
     ///Grabs link for a news article from the API.
 
@@ -59,7 +61,8 @@ impl NewsList {
         let resp =  client.get("https://www.toontownrewritten.com/api/news/list").send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
 
     ///Grabs a specific article index from NewsList.
     

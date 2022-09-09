@@ -9,7 +9,8 @@ use reqwest::Client;
 
 pub fn makeclient() -> Client {
     static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"),"/",env!("CARGO_PKG_VERSION"),);
-    Client::builder().user_agent(APP_USER_AGENT).build().unwrap()}
+    Client::builder().user_agent(APP_USER_AGENT).build().unwrap()
+}
 
 pub mod population;
 pub mod sillymeter;

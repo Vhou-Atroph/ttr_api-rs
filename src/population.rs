@@ -26,7 +26,8 @@ impl PopAPI {
         let resp =  client.get("https://www.toontownrewritten.com/api/population").send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
 
 
     ///Returns the current most popular district from the populationByDistrict HashMap.
@@ -37,7 +38,8 @@ impl PopAPI {
         let mut highest_count: u16 = 0;
         for (k,v) in dict.clone() {
             if v>highest_count {highest=k; highest_count=v;}
-        } highest}
+        } highest
+    }
     
     ///Returns the current least popular district from the populationByDistrict HashMap.
 
@@ -47,7 +49,8 @@ impl PopAPI {
         let mut lowest_count: u16 = 500;
         for (k,v) in dict.clone() {
             if v<lowest_count {lowest=k; lowest_count=v;}
-        } lowest}
+        } lowest
+    }
     
     /// Gets the population of a specific district. If the district does not exist, returns None.
     /// ```

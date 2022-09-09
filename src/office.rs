@@ -34,7 +34,8 @@ impl Office {
         let resp =  client.get("https://www.toontownrewritten.com/api/fieldoffices").send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
     
     ///Get a field office on a specific street. If it doesn't exist, returns None. Also returns the street ID.
     /// ```

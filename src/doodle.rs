@@ -35,7 +35,8 @@ impl Districts {
         let resp =  client.get("https://www.toontownrewritten.com/api/doodles").send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
     
     ///Get a specific doodle in a store today. If the district, playground, or doodle don't exist this function will return None.
     
@@ -48,7 +49,9 @@ impl Districts {
         Some(Doodle {
             dna: pg_vec[id].dna.clone(),
             traits: pg_vec[id].traits.clone(),
-            cost: pg_vec[id].cost,})}
+            cost: pg_vec[id].cost,
+        })
+    }
 }
 
 impl Doodle {
@@ -66,6 +69,7 @@ impl Doodle {
     /// ```
 
     pub fn render(&self,dim:u16,ext:&str) -> String { //TODO: make a separate rendition module
-        format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,dim,dim,ext)}
+        format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,dim,dim,ext)
+    }
 
 }

@@ -30,7 +30,8 @@ impl Release {
         let resp =  client.get(format!("https://www.toontownrewritten.com/api/releasenotes/{}",id)).send().await?
         .json::<Self>()
         .await?;
-        Ok(resp)}
+        Ok(resp)
+    }
 }
 
 impl NotesList {
