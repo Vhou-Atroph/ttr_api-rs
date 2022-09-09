@@ -74,3 +74,21 @@ fn verify_latest_date() {
     let latest_list = news_api_list.get_index(0);
     assert_eq!(news_api.date,latest_list.date)
 }
+#[test]
+fn verify_rel_noteid() {
+    let rel_api = releasenotes::Release::new(ttr_api::makeclient(),308).unwrap();
+    assert_eq!(rel_api.noteId,308)
+}
+#[test]
+#[ignore]
+fn latest_notes() {
+    let notes_api = releasenotes::NotesList::new(ttr_api::makeclient()).unwrap();
+    let latest = notes_api.get_index(0);
+    assert_eq!(latest.noteId,308); //Needs to match latest note ID
+}
+#[test]
+fn get_latest_notes() {
+    let notes_api = releasenotes::NotesList::new(ttr_api::makeclient()).unwrap();
+    let latest_notes = releasenotes::Release::new(ttr_api::makeclient(),notes_api.get_index(0).noteId).unwrap();
+    println!("{}",latest_notes.body.unwrap());
+}
