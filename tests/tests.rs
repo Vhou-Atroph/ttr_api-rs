@@ -67,3 +67,10 @@ fn verify_latest_links() {
     let latest_list = news_api_list.get_index(0);
     assert_eq!(news_api.get_link(),latest_list.get_link())
 }
+#[test]
+fn verify_latest_date() {
+    let news_api = news::News::new_latest(ttr_api::makeclient()).unwrap();
+    let news_api_list = news::NewsList::new(ttr_api::makeclient()).unwrap();
+    let latest_list = news_api_list.get_index(0);
+    assert_eq!(news_api.date,latest_list.date)
+}

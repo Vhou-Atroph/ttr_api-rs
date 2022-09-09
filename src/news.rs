@@ -8,12 +8,12 @@ use serde::Deserialize;
 
 ///Struct for the News article API for Toontown Rewritten. It does not have any formal documentation. You can find it at <https://www.toontownrewritten.com/api/news> or <https://www.toontownrewritten.com/api/news/[id]>.
 
-#[derive(Deserialize,Debug)]
+#[derive(Deserialize,Debug,Clone)]
 pub struct News {
     pub title: String,
     pub postId: u16,
     pub author: String,
-    pub body: String,
+    pub body: Option<String>,
     pub date: String,
     pub image: String,
 }
@@ -21,18 +21,7 @@ pub struct News {
 ///Struct for the News list API for Toontown Rewritten. It does not have any formal documentation. You can find it at <https://www.toontownrewritten.com/api/news/list>.
 
 #[derive(Deserialize,Debug)]
-pub struct NewsList(Vec<ListedNews>);
-
-///Struct for an article in the News list API for Toontown Rewritten. It does not have any formal documentation. You can find it at <https://www.toontownrewritten.com/api/news/list>.
-
-#[derive(Deserialize,Debug,Clone)]
-pub struct ListedNews {
-    pub postId: u16,
-    pub title: String,
-    pub author: String,
-    pub date: String,
-    pub image: String,
-}
+pub struct NewsList(Vec<News>);
 
 impl News {
 
@@ -74,16 +63,7 @@ impl NewsList {
 
     ///Grabs a specific article index from NewsList.
     
-    pub fn get_index(&self,index:usize) -> ListedNews {
+    pub fn get_index(&self,index:usize) -> News {
         self.0[index].clone()
-    }
-}
-
-impl ListedNews {
-
-    ///Grabs link for a news article from the API.
-    
-    pub fn get_link(&self) -> String {
-        format!("https://www.toontownrewritten.com/news/item/{}",self.postId)
     }
 }
