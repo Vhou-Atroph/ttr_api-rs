@@ -53,23 +53,3 @@ impl Districts {
         })
     }
 }
-
-impl Doodle {
-
-    ///Creates the link to a doodle rendition.
-    /// The below function would return the render of a doodle from the pet shop in the Toontown Central of Blam Canyon.
-    /// ```
-    /// use ttr_api::doodle;
-    /// 
-    /// fn doodle_render() -> String {
-    ///     let doodle_api = doodle::Districts::new(ttr_api::makeclient()).unwrap();
-    ///     let doodle = doodle_api.get_doodle("Blam Canyon","Toontown Central",0).unwrap();
-    ///     doodle.render(256,"png")
-    /// }
-    /// ```
-
-    pub fn render(&self,dim:u16,ext:&str) -> String { //TODO: make a separate rendition module
-        format!("rendition.toontownrewritten.com/render/{}/doodle/{}x{}.{}",self.dna,dim,dim,ext)
-    }
-
-}

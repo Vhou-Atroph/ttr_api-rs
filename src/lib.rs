@@ -19,3 +19,4 @@ pub mod office;
 pub mod doodle;
 pub mod news;
 pub mod releasenotes;
+pub mod rendition;
