@@ -37,7 +37,7 @@ impl Invasion {
         Ok(resp)
     }
     
-    /// Detects if a particular cog is currently invading a district and returns a tuple containing a boolean and an Option value.
+    /// Detects if a particular cog is currently invading a district and returns a tuple containing a boolean, the district name if a cog is invading, and an Option value containing the rest of the district information.
     /// ```
     /// use ttr_api::invasion::Invasion
     /// 
