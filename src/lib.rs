@@ -3,7 +3,7 @@
 #![allow(unused_variables)]
 #![deny(clippy::all)]
 extern crate reqwest;
-use reqwest::Client;
+pub use reqwest::Client;
 
 /// Makes the default client for the API checker. Clients are required to access the API, and this one is provided in case one does not wish to make their own.
 pub fn makeclient() -> Client {
