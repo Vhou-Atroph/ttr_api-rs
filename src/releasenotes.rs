@@ -15,10 +15,6 @@ pub struct Release {
     pub body: Option<String>
 }
 
-/// Struct for the release notes API for Toontown Rewritten. It does not have any formal documentation. You can find it at <https://www.toontownrewritten.com/api/releasenotes>.
-#[derive(Deserialize,Debug)]
-pub struct NotesList(Vec<Release>);
-
 impl Release {
 
     /// Get specific release notes by noteID.
@@ -30,6 +26,10 @@ impl Release {
         Ok(resp)
     }
 }
+
+/// Struct for the release notes API for Toontown Rewritten. It does not have any formal documentation. You can find it at <https://www.toontownrewritten.com/api/releasenotes>.
+#[derive(Deserialize,Debug)]
+pub struct NotesList(Vec<Release>);
 
 impl NotesList {
 

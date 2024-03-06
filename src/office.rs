@@ -14,15 +14,6 @@ pub struct Office {
     pub fieldOffices: HashMap<u16,HQ>
 }
 
-/// Struct for each individual street's field office
-#[derive(Deserialize,Debug)]
-pub struct HQ {
-    pub department: char,
-    pub difficulty: u8,
-    pub annexes: u16,
-    pub expiring: Option<i64>,
-}
-
 impl Office {
     
     /// Grabs information from the Field Office API and converts it to the Offices struct.
@@ -58,6 +49,15 @@ impl Office {
                 expiring: hq_hash.expiring,}),street)} 
         else {(None,street)}
     }
+}
+
+/// Struct for each individual street's field office
+#[derive(Deserialize,Debug)]
+pub struct HQ {
+    pub department: char,
+    pub difficulty: u8,
+    pub annexes: u16,
+    pub expiring: Option<i64>,
 }
 
 /// Converts the locale id of a Field Office into a street name if it exists.

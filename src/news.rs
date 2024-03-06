@@ -17,10 +17,6 @@ pub struct News {
     pub image: String,
 }
 
-/// Struct for the News list API for Toontown Rewritten. It does not have any formal documentation. You can find it at <https://www.toontownrewritten.com/api/news/list>.
-#[derive(Deserialize,Debug)]
-pub struct NewsList(Vec<News>);
-
 impl News {
 
     /// Grabs the latest news article from the API.
@@ -46,6 +42,10 @@ impl News {
         format!("https://www.toontownrewritten.com/news/item/{}",self.postId)
     }
 }
+
+/// Struct for the News list API for Toontown Rewritten. It does not have any formal documentation. You can find it at <https://www.toontownrewritten.com/api/news/list>.
+#[derive(Deserialize,Debug)]
+pub struct NewsList(Vec<News>);
 
 impl NewsList {
 

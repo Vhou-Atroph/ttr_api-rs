@@ -11,14 +11,6 @@ use serde::Deserialize;
 #[derive(Deserialize,Debug)]
 pub struct Districts (HashMap<String,HashMap<String,Vec<Doodle>>>);
 
-/// Struct for information about a specific doodle.
-#[derive(Deserialize,Debug)]
-pub struct Doodle {
-    pub dna: String,
-    pub traits: Vec<String>,
-    pub cost: u16,
-}
-
 impl Districts {
 
     /// Grabs information from the Doodle API and converts it to the Districts struct.
@@ -48,4 +40,12 @@ impl Districts {
             cost: pg_vec[id].cost,
         })
     }
+}
+
+/// Struct for information about a specific doodle.
+#[derive(Deserialize,Debug)]
+pub struct Doodle {
+    pub dna: String,
+    pub traits: Vec<String>,
+    pub cost: u16,
 }

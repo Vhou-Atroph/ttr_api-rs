@@ -63,4 +63,4 @@ impl PopAPI {
         let pop;
         if self.populationByDistrict.contains_key(dist) {pop = self.populationByDistrict.get(dist).unwrap();}
         else {return None} Some(*pop)}
-    }
+}

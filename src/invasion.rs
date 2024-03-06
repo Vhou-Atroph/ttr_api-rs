@@ -15,14 +15,6 @@ pub struct Invasion {
     pub lastUpdated: i64,
 }
 
-/// Struct for each individual district's invasions
-#[derive(Deserialize,Debug)]
-pub struct DistrictInv {
-    pub asOf: i64,
-    pub r#type: String,
-    pub progress: String,
-}
-
 impl Invasion {
     
     /// Grabs information from the Invasions API and converts it to the Invasion struct.
@@ -33,4 +25,12 @@ impl Invasion {
         .await?;
         Ok(resp)
     }
+}
+
+/// Struct for each individual district's invasions
+#[derive(Deserialize,Debug)]
+pub struct DistrictInv {
+    pub asOf: i64,
+    pub r#type: String,
+    pub progress: String,
 }
