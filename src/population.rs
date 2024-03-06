@@ -1,4 +1,4 @@
-//!Tools for Toontown Rewritten's Population API
+//! Tools for Toontown Rewritten's Population API
 
 extern crate reqwest;
 extern crate serde;
@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use reqwest::Client;
 use serde::Deserialize;
 
-///Struct for the Population API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/population.md>
+/// Struct for the Population API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/population.md>
 
 #[derive(Deserialize,Debug)]
 pub struct PopAPI {
@@ -19,8 +19,7 @@ pub struct PopAPI {
 
 impl PopAPI {
 
-    ///Grabs information from the Population API and converts it to the PopAPI struct.
-
+    /// Grabs information from the Population API and converts it to the PopAPI struct.
     #[tokio::main]
     pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
         let resp =  client.get("https://www.toontownrewritten.com/api/population").send().await?
@@ -30,8 +29,7 @@ impl PopAPI {
     }
 
 
-    ///Returns the current most popular district from the populationByDistrict HashMap.
-
+    /// Returns the current most popular district from the populationByDistrict HashMap.
     pub fn highest_pop(&self) -> String {
         let dict = &self.populationByDistrict;
         let mut highest = String::new();
@@ -41,8 +39,7 @@ impl PopAPI {
         } highest
     }
     
-    ///Returns the current least popular district from the populationByDistrict HashMap.
-
+    /// Returns the current least popular district from the populationByDistrict HashMap.
     pub fn lowest_pop(&self) -> String {
         let dict = &self.populationByDistrict;
         let mut lowest = String::new();
@@ -62,7 +59,6 @@ impl PopAPI {
     ///     println!("Blam Canyon currently has a population of {} toons.",blam_pop);
     /// }
     /// ```
-    
     pub fn dist_pop(&self,dist:&str) -> Option<u16> {
         let pop;
         if self.populationByDistrict.contains_key(dist) {pop = self.populationByDistrict.get(dist).unwrap();}

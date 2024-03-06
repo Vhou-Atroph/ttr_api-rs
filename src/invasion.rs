@@ -8,7 +8,6 @@ use reqwest::Client;
 use serde::Deserialize;
 
 /// Struct for the Invasions API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/invasions.md>
-
 #[derive(Deserialize,Debug)]
 pub struct Invasion {
     pub error: Option<String>,
@@ -17,7 +16,6 @@ pub struct Invasion {
 }
 
 /// Struct for each individual district's invasions
-
 #[derive(Deserialize,Debug)]
 pub struct DistrictInv {
     pub asOf: i64,

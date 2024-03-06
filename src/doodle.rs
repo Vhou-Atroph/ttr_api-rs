@@ -1,4 +1,4 @@
-//!Tools for Toontown Rewritten's Doodle API
+//! Tools for Toontown Rewritten's Doodle API
 
 extern crate reqwest;
 extern crate serde;
@@ -7,13 +7,11 @@ use std::collections::HashMap;
 use reqwest::Client;
 use serde::Deserialize;
 
-///Struct for the Doodle API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/doodles.md>
-
+/// Struct for the Doodle API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/doodles.md>
 #[derive(Deserialize,Debug)]
 pub struct Districts (HashMap<String,HashMap<String,Vec<Doodle>>>);
 
-///Struct for information about a specific doodle.
-
+/// Struct for information about a specific doodle.
 #[derive(Deserialize,Debug)]
 pub struct Doodle {
     pub dna: String,
@@ -23,13 +21,12 @@ pub struct Doodle {
 
 impl Districts {
 
-    ///Grabs information from the Doodle API and converts it to the Districts struct.
+    /// Grabs information from the Doodle API and converts it to the Districts struct.
     /// ```
     /// use ttr_api::doodle;
     /// 
     /// let doodle_api = doodle::Districts::new(ttr_api::makeclient()).unwrap();
     /// ```
-
     #[tokio::main]
     pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
         let resp =  client.get("https://www.toontownrewritten.com/api/doodles").send().await?
@@ -38,8 +35,7 @@ impl Districts {
         Ok(resp)
     }
     
-    ///Get a specific doodle in a store today. If the district, playground, or doodle don't exist this function will return None.
-    
+    /// Get a specific doodle in a store today. If the district, playground, or doodle don't exist this function will return None.
     pub fn get_doodle(&self,dist:&str,playground:&str,id:usize) -> Option<Doodle> {
         if id>6 {return None}
         let dist_hash;

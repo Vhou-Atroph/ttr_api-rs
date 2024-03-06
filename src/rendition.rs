@@ -25,7 +25,6 @@ impl Render for doodle::Doodle {
     ///     doodle.render(256,Format::Png)
     /// }
     /// ```
-
     fn render(&self,dim:usize,format:Format) -> String {
         match format {
             Format::Png => format!("https://rendition.toontownrewritten.com/render/{}/doodle/{}x{}.png",self.dna,dim,dim),

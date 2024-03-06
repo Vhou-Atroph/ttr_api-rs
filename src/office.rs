@@ -1,4 +1,4 @@
-//!Tools for Toontown Rewritten's Field Office API
+//! Tools for Toontown Rewritten's Field Office API
 
 extern crate reqwest;
 extern crate serde;
@@ -7,16 +7,14 @@ use std::collections::HashMap;
 use reqwest::Client;
 use serde::Deserialize;
 
-///Struct for the Field Office API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/field-offices.md>
-
+/// Struct for the Field Office API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/field-offices.md>
 #[derive(Deserialize,Debug)]
 pub struct Office {
     pub lastUpdated: i64,
     pub fieldOffices: HashMap<u16,HQ>
 }
 
-///Struct for each individual street's field office
-
+/// Struct for each individual street's field office
 #[derive(Deserialize,Debug)]
 pub struct HQ {
     pub department: char,
@@ -27,8 +25,7 @@ pub struct HQ {
 
 impl Office {
     
-    ///Grabs information from the Field Office API and converts it to the Offices struct.
-
+    /// Grabs information from the Field Office API and converts it to the Offices struct.
     #[tokio::main]
     pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
         let resp =  client.get("https://www.toontownrewritten.com/api/fieldoffices").send().await?
@@ -37,7 +34,7 @@ impl Office {
         Ok(resp)
     }
     
-    ///Get a field office on a specific street. If it doesn't exist, returns None. Also returns the street ID.
+    /// Get a field office on a specific street. If it doesn't exist, returns None. Also returns the street ID.
     /// ```
     /// use ttr_api::office;
     /// 
@@ -50,7 +47,6 @@ impl Office {
     ///     }
     /// }
     /// ```
-    
     pub fn get_office(&self,street:u16) -> (Option<HQ>,u16) {
         let hq_hash;
         if self.fieldOffices.contains_key(&street) 
@@ -64,8 +60,7 @@ impl Office {
     }
 }
 
-///Converts the locale id of a Field Office into a street name if it exists.
-
+/// Converts the locale id of a Field Office into a street name if it exists.
 pub fn locale(id:u16) -> Option<String> {
     match id {
         3100 => Some(String::from("Walrus Way")),
