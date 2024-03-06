@@ -1,19 +1,7 @@
 use ttr_api::*;
 use ttr_api::rendition::Render;
 
-#[test]
-#[ignore]
-fn is_cog_invading() {
-    let inv = invasion::Invasion::new(ttr_api::makeclient()).unwrap();
-    let test = inv.cog_invading("Cold Caller"); //Change this to a cog that is currently invading.
-    assert_eq!(test.0,true)
-}
-#[test]
-fn is_cog_not_invading() {
-    let inv = invasion::Invasion::new(ttr_api::makeclient()).unwrap();
-    let test = inv.cog_invading("Director of Ambush Marketing");
-    assert_eq!(test.0,false)
-}
+
 #[test]
 fn correct_fo_zone() {
     let walway = 3100;

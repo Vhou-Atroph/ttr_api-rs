@@ -28,29 +28,11 @@ pub struct DistrictInv {
 impl Invasion {
     
     /// Grabs information from the Invasions API and converts it to the Invasion struct.
-
     #[tokio::main]
     pub async fn new(client:Client) -> Result<Self,Box<dyn std::error::Error>> {
         let resp =  client.get("https://www.toontownrewritten.com/api/invasions").send().await?
         .json::<Self>()
         .await?;
         Ok(resp)
-    }
-    
-    /// Detects if a particular cog is currently invading a district and returns a tuple containing a boolean, the district name if a cog is invading, and an Option value containing the rest of the district information.
-    /// ```
-    /// use ttr_api::invasion::Invasion
-    /// 
-    /// fn minglers_invading() -> Option<String> {
-    ///     let invasions = Invasion::new().unwrap();
-    ///     let minglers_district = invasions.cog_invading("The Mingler");
-    ///     
-    /// }
-    /// ```
-    
-    pub fn cog_invading(&self,cog:&str) -> (bool,Option<String>,Option<&DistrictInv>) {
-        for (k,v) in &self.invasions {
-            if v.r#type == cog.to_string() {return (true,Some(k.clone()),Some(v))}
-        } (false,None,None)
     }
 }
