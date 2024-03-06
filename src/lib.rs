@@ -20,3 +20,4 @@ pub mod news;
 pub mod releasenotes;
 pub mod rendition;
 pub mod racing;
+pub mod dna;

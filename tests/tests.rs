@@ -1,3 +1,4 @@
+use ttr_api::dna::DNA;
 use ttr_api::*;
 use ttr_api::rendition::Render;
 
@@ -14,7 +15,7 @@ fn invalid_zone() {
 }
 #[test]
 fn doodle_render() {
-    let doodle = doodle::Doodle {dna:String::from("64ff02ff01030e010001"),traits:vec!(String::from("godawful")),cost:1};
+    let doodle = doodle::Doodle {dna:DNA("64ff02ff01030e010001".to_string()),traits:vec!(String::from("godawful")),cost:1};
     let dod = doodle.render(256,rendition::Format::Png);
     assert_eq!(dod,String::from("https://rendition.toontownrewritten.com/render/64ff02ff01030e010001/doodle/256x256.png"));
 }

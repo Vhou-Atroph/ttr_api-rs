@@ -7,6 +7,8 @@ use std::collections::HashMap;
 use reqwest::Client;
 use serde::Deserialize;
 
+use crate::dna::DNA;
+
 /// Struct for the highest division of the Racing Leaderboards API. You can find the API at <https://toontownrewritten.com/api/racing>.
 #[derive(Deserialize, Debug)]
 pub struct RacingLeaderboards {
@@ -30,4 +32,4 @@ impl RacingLeaderboards {
 
 /// Struct for an individual entry on the Racing Leaderboard.
 #[derive(Deserialize, Debug)]
-pub struct LeaderboardMember(String, String, f64);
+pub struct LeaderboardMember(String, DNA, f64);

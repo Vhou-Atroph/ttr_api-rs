@@ -7,6 +7,8 @@ use std::collections::HashMap;
 use reqwest::Client;
 use serde::Deserialize;
 
+use crate::dna::DNA;
+
 /// Struct for the Doodle API for Toontown Rewritten. See information regarding the API at <https://github.com/ToontownRewritten/api-doc/blob/master/doodles.md>
 #[derive(Deserialize,Debug)]
 pub struct Districts (HashMap<String,HashMap<String,Vec<Doodle>>>);
@@ -43,9 +45,9 @@ impl Districts {
 }
 
 /// Struct for information about a specific doodle.
-#[derive(Deserialize,Debug)]
+#[derive(Deserialize, Debug)]
 pub struct Doodle {
-    pub dna: String,
+    pub dna: DNA,
     pub traits: Vec<String>,
     pub cost: u16,
 }
